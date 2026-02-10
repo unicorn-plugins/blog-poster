@@ -1,0 +1,16 @@
+# 에이전트가 필요로 하는 도구 선언
+tools:
+  - name: file_read
+    description: "블로그 초안 및 주제 정보 읽기"
+    input: { 파일경로 }
+    output: { 파일내용 }
+
+  - name: image_generate
+    description: "AI 모델(Gemini)로 이미지 생성"
+    input: { 프롬프트, 출력경로, 파일명 }
+    output: { 이미지파일경로 }
+
+  - name: code_execute
+    description: "이미지 생성 스크립트 실행"
+    input: { 명령어 }
+    output: { 실행결과 }

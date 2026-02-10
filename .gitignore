@@ -1,0 +1,24 @@
+# 보안 파일
+.env
+.dmap/secrets/
+gateway/tools/.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# 임시 파일
+*.tmp
+*.log
+output/

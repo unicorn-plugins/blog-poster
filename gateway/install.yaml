@@ -1,0 +1,18 @@
+# ─────────────────────────────────────────────
+# MCP 서버 — 외부 도구 제공
+# ─────────────────────────────────────────────
+mcp_servers:
+  - name: context7
+    description: "라이브러리 공식 문서 검색 및 코드 예시 제공"
+    config: mcp/context7.json
+    scope: user
+    required: false
+
+# ─────────────────────────────────────────────
+# 커스텀 도구 — 플러그인 자체 구현
+# ─────────────────────────────────────────────
+custom_tools:
+  - name: generate_image
+    description: "Gemini 모델 기반 AI 이미지 생성 (블로그 삽화/썸네일)"
+    source: tools/generate_image.py
+    required: false

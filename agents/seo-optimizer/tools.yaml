@@ -1,0 +1,6 @@
+# 에이전트가 필요로 하는 도구 선언
+tools:
+  - name: file_read
+    description: "블로그 초안 및 리서치 결과 읽기"
+    input: { 파일경로 }
+    output: { 파일내용 }

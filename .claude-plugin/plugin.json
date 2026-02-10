@@ -1,0 +1,10 @@
+{
+  "name": "blog-poster",
+  "version": "1.0.0",
+  "description": "기술/IT 블로그 글을 주제 리서치부터 최종 Word 문서 출력까지 자동화하는 블로그 작성 에이전트",
+  "author": {
+    "name": "Dream Ondal"
+  },
+  "license": "MIT",
+  "keywords": ["blog", "content", "seo", "writing", "automation", "dmap"]
+}

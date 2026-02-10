@@ -1,0 +1,16 @@
+# 에이전트가 필요로 하는 도구 선언
+tools:
+  - name: file_read
+    description: "리서치 결과, SEO 결과, 이미지 파일 읽기"
+    input: { 파일경로 }
+    output: { 파일내용 }
+
+  - name: file_write
+    description: "블로그 글 초안 저장 및 Word(.docx) 문서 생성"
+    input: { 파일경로, 내용 }
+    output: { 저장결과 }
+
+  - name: code_execute
+    description: "python-docx를 사용한 Word 문서 생성 스크립트 실행"
+    input: { 명령어 }
+    output: { 실행결과 }

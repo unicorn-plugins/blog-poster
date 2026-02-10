@@ -1,0 +1,17 @@
+# 에이전트가 필요로 하는 도구 선언
+# 런타임이 Gateway의 runtime-mapping.yaml을 참조하여 실제 도구에 매핑
+tools:
+  - name: web_search
+    description: "웹에서 최신 정보, 트렌드, 뉴스 검색"
+    input: { 검색쿼리 }
+    output: { 검색결과목록 }
+
+  - name: doc_search
+    description: "기술 라이브러리 공식 문서 검색 및 코드 예시 조회"
+    input: { 라이브러리명, 검색질의 }
+    output: { 문서내용, 코드예시 }
+
+  - name: file_read
+    description: "기존 자료 파일 읽기"
+    input: { 파일경로 }
+    output: { 파일내용 }
