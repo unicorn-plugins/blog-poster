@@ -40,6 +40,9 @@ user-invocable: true
 
 tier → model 매핑 (MEDIUM): `gateway/runtime-mapping.yaml`의 `tier_mapping.MEDIUM.claude-code` 참조
 
+### 서브 에이젼트 호출
+워크플로우 단계에 `Agent: {agent-name}`이 명시된 경우, 해당 에이전트를 위 프롬프트 조립 규칙에 따라 호출
+
 ## 워크플로우
 
 ### Phase 1: 옵션 수집
