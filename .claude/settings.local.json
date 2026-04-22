@@ -5,7 +5,9 @@
       "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/gateway/tools/youtube-search\")",
       "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/gateway/tools/general\")",
       "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/agents/researcher\")",
-      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/agents/writer\")"
+      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/agents/writer\")",
+      "Bash(python -c \"import docx\")",
+      "Bash(pip show *)"
     ]
   }
 }

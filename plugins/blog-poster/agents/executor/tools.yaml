@@ -1,0 +1,20 @@
+tools:
+  - name: file_read
+    description: "SEO 최적화 파일 읽기"
+    input: { 파일경로 }
+    output: { 파일_내용 }
+
+  - name: file_write
+    description: "final.md 저장"
+    input: { 파일경로, 내용 }
+    output: { 저장_완료_여부 }
+
+  - name: bash_execute
+    description: "generate_image.py 실행하여 이미지 생성"
+    input: { 명령어, 출력_디렉토리, 파일명 }
+    output: { 생성된_이미지_경로 }
+
+  - name: generate_image
+    description: "Gemini 모델 기반 이미지 생성 (generate_image.py 래퍼)"
+    input: { 프롬프트, 출력_디렉토리, 출력_파일명 }
+    output: { 이미지_파일_경로 }

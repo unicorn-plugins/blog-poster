@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Poster — Team Collaboration</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3e;
+    --accent-researcher: #6c63ff;
+    --accent-writer: #ff6584;
+    --accent-editor: #43b89c;
+    --accent-visual: #f7b731;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, #6c63ff, #ff6584, #43b89c, #f7b731);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 48px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Pipeline ── */
+  .pipeline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    max-width: 1100px;
+    margin: 0 auto 56px;
+  }
+
+  .agent-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .agent-card {
+    width: 200px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 24px 20px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+
+  .agent-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  }
+
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .agent-card.researcher::before { background: var(--accent-researcher); }
+  .agent-card.writer::before     { background: var(--accent-writer); }
+  .agent-card.editor::before     { background: var(--accent-editor); }
+  .agent-card.visual::before     { background: var(--accent-visual); }
+
+  .step-badge {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.07);
+    color: var(--muted);
+  }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 14px;
+  }
+
+  .researcher .avatar { background: rgba(108,99,255,0.15); }
+  .writer .avatar     { background: rgba(255,101,132,0.15); }
+  .editor .avatar     { background: rgba(67,184,156,0.15); }
+  .visual .avatar     { background: rgba(247,183,49,0.15); }
+
+  .en-role {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .researcher .en-role { color: var(--accent-researcher); }
+  .writer .en-role     { color: var(--accent-writer); }
+  .editor .en-role     { color: var(--accent-editor); }
+  .visual .en-role     { color: var(--accent-visual); }
+
+  .nickname {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .full-name {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 12px;
+  }
+
+  .task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .task-list li {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+
+  .task-list li::before {
+    content: '›';
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+
+  .researcher .task-list li::before { color: var(--accent-researcher); }
+  .writer .task-list li::before     { color: var(--accent-writer); }
+  .editor .task-list li::before     { color: var(--accent-editor); }
+  .visual .task-list li::before     { color: var(--accent-visual); }
+
+  /* Arrow connector */
+  .arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 48px;
+    flex-shrink: 0;
+    padding-top: 60px;
+  }
+
+  .arrow-line {
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--from-color), var(--to-color));
+    position: relative;
+  }
+
+  .arrow-label {
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  .arrow svg {
+    display: block;
+  }
+
+  /* ── Output Section ── */
+  .output-section {
+    max-width: 1100px;
+    margin: 0 auto 48px;
+  }
+
+  .output-section h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .output-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .output-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 0.78rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .output-item:hover { border-color: #4a4d6e; }
+
+  .output-item .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Chat preview ── */
+  .chat-section {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .chat-section h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .chat-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bubble-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.4s forwards;
+  }
+
+  .bubble-row:nth-child(1)  { animation-delay: 0.1s; }
+  .bubble-row:nth-child(2)  { animation-delay: 0.5s; }
+  .bubble-row:nth-child(3)  { animation-delay: 0.9s; }
+  .bubble-row:nth-child(4)  { animation-delay: 1.3s; }
+  .bubble-row:nth-child(5)  { animation-delay: 1.7s; }
+  .bubble-row:nth-child(6)  { animation-delay: 2.1s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bubble-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .bubble-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .bubble-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .bubble-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .bubble-role-tag {
+    font-size: 0.62rem;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .bubble-time {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  .bubble-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0 12px 12px 12px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    max-width: 620px;
+  }
+
+  .bubble-body code {
+    background: rgba(255,255,255,0.07);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #93c5fd;
+  }
+
+  /* Color helpers */
+  .c-researcher { color: var(--accent-researcher); }
+  .c-writer     { color: var(--accent-writer); }
+  .c-editor     { color: var(--accent-editor); }
+  .c-visual     { color: var(--accent-visual); }
+
+  .bg-researcher { background: rgba(108,99,255,0.15); }
+  .bg-writer     { background: rgba(255,101,132,0.15); }
+  .bg-editor     { background: rgba(67,184,156,0.15); }
+  .bg-visual     { background: rgba(247,183,49,0.15); }
+
+  .tag-researcher { background: rgba(108,99,255,0.2); color: var(--accent-researcher); }
+  .tag-writer     { background: rgba(255,101,132,0.2); color: var(--accent-writer); }
+  .tag-editor     { background: rgba(67,184,156,0.2); color: var(--accent-editor); }
+  .tag-visual     { background: rgba(247,183,49,0.2); color: var(--accent-visual); }
+
+  /* Pulse dot on active card */
+  .pulse {
+    position: absolute;
+    top: 14px; left: 16px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .pulse::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .researcher .pulse { background: var(--accent-researcher); }
+  .researcher .pulse::after { border: 2px solid var(--accent-researcher); }
+  .writer .pulse     { background: var(--accent-writer); }
+  .writer .pulse::after { border: 2px solid var(--accent-writer); }
+  .editor .pulse     { background: var(--accent-editor); }
+  .editor .pulse::after { border: 2px solid var(--accent-editor); }
+  .visual .pulse     { background: var(--accent-visual); }
+  .visual .pulse::after { border: 2px solid var(--accent-visual); }
+
+  @keyframes pulse {
+    0%   { transform: scale(1); opacity: 1; }
+    70%  { transform: scale(2); opacity: 0; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  /* Typing indicator */
+  .typing {
+    display: inline-flex;
+    gap: 3px;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .typing span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: blink 1.2s infinite;
+  }
+
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0.2; transform: scale(1); }
+    40%           { opacity: 1;   transform: scale(1.3); }
+  }
+</style>
+</head>
+<body>
+
+<h1>Blog Poster — Team Collaboration</h1>
+<p class="subtitle">블로그 글 작성 에이전트 협업 파이프라인</p>
+
+<!-- ─────────────── AGENT PIPELINE ─────────────── -->
+<div class="pipeline">
+
+  <!-- 1. Content Researcher -->
+  <div class="agent-wrap">
+    <div class="agent-card researcher">
+      <div class="pulse"></div>
+      <span class="step-badge">STEP 1</span>
+      <div class="avatar">🔍</div>
+      <div class="en-role">Content Researcher</div>
+      <div class="nickname">지연</div>
+      <div class="full-name">박지연 · 29 · F</div>
+      <div class="divider"></div>
+      <ul class="task-list">
+        <li>주제 키워드 분석</li>
+        <li>웹 검색 및 자료 수집</li>
+        <li>트렌드 · 통계 정리</li>
+        <li><code>0.research.md</code> 산출</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Arrow 1→2 -->
+  <div class="arrow">
+    <svg width="48" height="16" style="--from-color:#6c63ff;--to-color:#ff6584">
+      <defs>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#6c63ff"/>
+          <stop offset="100%" stop-color="#ff6584"/>
+        </linearGradient>
+      </defs>
+      <line x1="4" y1="8" x2="38" y2="8" stroke="url(#g1)" stroke-width="2"/>
+      <polygon points="38,4 48,8 38,12" fill="#ff6584"/>
+    </svg>
+    <span class="arrow-label">research</span>
+  </div>
+
+  <!-- 2. Blog Content Writer -->
+  <div class="agent-wrap">
+    <div class="agent-card writer">
+      <div class="pulse"></div>
+      <span class="step-badge">STEP 2</span>
+      <div class="avatar">✍️</div>
+      <div class="en-role">Blog Content Writer</div>
+      <div class="nickname">서윤</div>
+      <div class="full-name">김서윤 · 32 · F</div>
+      <div class="divider"></div>
+      <ul class="task-list">
+        <li>리서치 기반 초안 작성</li>
+        <li>독자 친화적 구조 설계</li>
+        <li>SEO 최적화 문장 구성</li>
+        <li><code>1.draft.md</code> 산출</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Arrow 2→3 -->
+  <div class="arrow">
+    <svg width="48" height="16">
+      <defs>
+        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#ff6584"/>
+          <stop offset="100%" stop-color="#43b89c"/>
+        </linearGradient>
+      </defs>
+      <line x1="4" y1="8" x2="38" y2="8" stroke="url(#g2)" stroke-width="2"/>
+      <polygon points="38,4 48,8 38,12" fill="#43b89c"/>
+    </svg>
+    <span class="arrow-label">draft</span>
+  </div>
+
+  <!-- 3. Content Editor -->
+  <div class="agent-wrap">
+    <div class="agent-card editor">
+      <div class="pulse"></div>
+      <span class="step-badge">STEP 3</span>
+      <div class="avatar">📝</div>
+      <div class="en-role">Content Editor</div>
+      <div class="nickname">준혁</div>
+      <div class="full-name">이준혁 · 38 · M</div>
+      <div class="divider"></div>
+      <ul class="task-list">
+        <li>품질 · 사실관계 검토</li>
+        <li>논리 흐름 · 구조 개선</li>
+        <li>명사체 문체 통일</li>
+        <li><code>2.reviewed.md</code> 산출</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Arrow 3→4 -->
+  <div class="arrow">
+    <svg width="48" height="16">
+      <defs>
+        <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#43b89c"/>
+          <stop offset="100%" stop-color="#f7b731"/>
+        </linearGradient>
+      </defs>
+      <line x1="4" y1="8" x2="38" y2="8" stroke="url(#g3)" stroke-width="2"/>
+      <polygon points="38,4 48,8 38,12" fill="#f7b731"/>
+    </svg>
+    <span class="arrow-label">reviewed</span>
+  </div>
+
+  <!-- 4. Visual Content Creator -->
+  <div class="agent-wrap">
+    <div class="agent-card visual">
+      <div class="pulse"></div>
+      <span class="step-badge">STEP 4</span>
+      <div class="avatar">🎨</div>
+      <div class="en-role">Visual Content Creator</div>
+      <div class="nickname">도현</div>
+      <div class="full-name">최도현 · 27 · M</div>
+      <div class="divider"></div>
+      <ul class="task-list">
+        <li>이미지 프롬프트 생성</li>
+        <li>AI 이미지 병렬 생성</li>
+        <li>표지 · 본문 이미지 배치</li>
+        <li><code>3.final.docx</code> 산출</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─────────────── OUTPUT CHAIN ─────────────── -->
+<div class="output-section">
+  <h2>Output Pipeline</h2>
+  <div class="output-flow">
+    <div class="output-item">
+      <span class="dot" style="background:var(--accent-researcher)"></span>
+      <span>0.research.md</span>
+    </div>
+    <svg width="20" height="12"><line x1="0" y1="6" x2="14" y2="6" stroke="#2a2d3e" stroke-width="2"/><polygon points="14,2 20,6 14,10" fill="#2a2d3e"/></svg>
+    <div class="output-item">
+      <span class="dot" style="background:var(--accent-writer)"></span>
+      <span>1.draft.md</span>
+    </div>
+    <svg width="20" height="12"><line x1="0" y1="6" x2="14" y2="6" stroke="#2a2d3e" stroke-width="2"/><polygon points="14,2 20,6 14,10" fill="#2a2d3e"/></svg>
+    <div class="output-item">
+      <span class="dot" style="background:var(--accent-editor)"></span>
+      <span>2.reviewed.md</span>
+    </div>
+    <svg width="20" height="12"><line x1="0" y1="6" x2="14" y2="6" stroke="#2a2d3e" stroke-width="2"/><polygon points="14,2 20,6 14,10" fill="#2a2d3e"/></svg>
+    <div class="output-item">
+      <span class="dot" style="background:var(--accent-visual)"></span>
+      <span>images/</span>
+    </div>
+    <svg width="20" height="12"><line x1="0" y1="6" x2="14" y2="6" stroke="#2a2d3e" stroke-width="2"/><polygon points="14,2 20,6 14,10" fill="#2a2d3e"/></svg>
+    <div class="output-item" style="border-color:#4a4d6e; background:#1e2138;">
+      <span class="dot" style="background:linear-gradient(135deg,#6c63ff,#f7b731)"></span>
+      <strong>3.final.docx</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────── CHAT PREVIEW ─────────────── -->
+<div class="chat-section">
+  <h2>Team Chat — 실시간 협업 흐름</h2>
+  <div class="chat-feed">
+
+    <div class="bubble-row">
+      <div class="bubble-avatar bg-researcher">🔍</div>
+      <div class="bubble-meta">
+        <div class="bubble-header">
+          <span class="bubble-name c-researcher">지연</span>
+          <span class="bubble-role-tag tag-researcher">Content Researcher</span>
+          <span class="bubble-time">09:02</span>
+        </div>
+        <div class="bubble-body">
+          주제 키워드 분석 완료. "Claude AI 활용법" 관련 최신 아티클 12건, 공식 문서 3건 수집했어.
+          트렌드 데이터 보니 최근 3개월 검색량이 340% 급증했어. <code>0.research.md</code> 업데이트함.
+        </div>
+      </div>
+    </div>
+
+    <div class="bubble-row">
+      <div class="bubble-avatar bg-writer">✍️</div>
+      <div class="bubble-meta">
+        <div class="bubble-header">
+          <span class="bubble-name c-writer">서윤</span>
+          <span class="bubble-role-tag tag-writer">Blog Content Writer</span>
+          <span class="bubble-time">09:18</span>
+        </div>
+        <div class="bubble-body">
+          지연 리서치 바탕으로 초안 작성 시작. 독자 타겟은 AI 입문자 + 실무 활용 원하는 직장인으로 잡을게.
+          H2 섹션 5개 구조로 가고, 각 섹션 300자 내외로 맞출 예정. 30분 안에 드래프트 올릴게.
+        </div>
+      </div>
+    </div>
+
+    <div class="bubble-row">
+      <div class="bubble-avatar bg-editor">📝</div>
+      <div class="bubble-meta">
+        <div class="bubble-header">
+          <span class="bubble-name c-editor">준혁</span>
+          <span class="bubble-role-tag tag-editor">Content Editor</span>
+          <span class="bubble-time">09:21</span>
+        </div>
+        <div class="bubble-body">
+          서윤, 초안 완성되면 바로 확인할게. 지난 번 피드백 기억나지?
+          명사체 종결어미 통일이랑, 출처 링크 각 사실 주장에 반드시 달아주는 거 신경 써줘.
+          구조 훑어보고 논리 흐름 개선 사항 있으면 인라인 코멘트로 달게.
+        </div>
+      </div>
+    </div>
+
+    <div class="bubble-row">
+      <div class="bubble-avatar bg-writer">✍️</div>
+      <div class="bubble-meta">
+        <div class="bubble-header">
+          <span class="bubble-name c-writer">서윤</span>
+          <span class="bubble-role-tag tag-writer">Blog Content Writer</span>
+          <span class="bubble-time">09:52</span>
+        </div>
+        <div class="bubble-body">
+          <code>1.draft.md</code> 올렸어. 섹션 구성: ① 개요 ② 핵심 기능 5가지 ③ 실무 적용 사례 ④ 주의사항 ⑤ 마무리.
+          준혁, 3섹션 사례 부분이 좀 길 수 있는데 봐줘. 지연 데이터가 워낙 풍부해서 다 담으려다 보니.
+        </div>
+      </div>
+    </div>
+
+    <div class="bubble-row">
+      <div class="bubble-avatar bg-editor">📝</div>
+      <div class="bubble-meta">
+        <div class="bubble-header">
+          <span class="bubble-name c-editor">준혁</span>
+          <span class="bubble-role-tag tag-editor">Content Editor</span>
+          <span class="bubble-time">10:14</span>
+        </div>
+        <div class="bubble-body">
+          리뷰 완료. 사례 섹션은 Top 3만 남기고 나머지는 "관련 글 참조" 처리하면 딱 맞을 것 같아.
+          전반적으로 흐름 좋고 명사체 잘 지켜줬어. <code>2.reviewed.md</code> 반영함. 도현, 이미지 작업 시작해줘.
+        </div>
+      </div>
+    </div>
+
+    <div class="bubble-row">
+      <div class="bubble-avatar bg-visual">🎨</div>
+      <div class="bubble-meta">
+        <div class="bubble-header">
+          <span class="bubble-name c-visual">도현</span>
+          <span class="bubble-role-tag tag-visual">Visual Content Creator</span>
+          <span class="bubble-time">10:17</span>
+        </div>
+        <div class="bubble-body">
+          잡았어! 섹션별 이미지 프롬프트 5개 병렬 생성 돌리고 있어. 표지 이미지는 "미래적인 AI 협업" 컨셉으로.
+          완성되면 <code>images/</code> 폴더에 넣고 docx로 패키징할게. 오늘 마감 전에 <code>3.final.docx</code> 전달 가능.
+          <div class="typing" style="margin-top:6px"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

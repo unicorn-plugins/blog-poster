@@ -1,0 +1,36 @@
+{
+  "name": "blog-poster",
+  "version": "0.0.1",
+  "description": "특정 주제를 조사해 한국어 블로그 글과 docx 문서를 작성하는 플러그인",
+  "author": {
+    "name": "dreamondal"
+  },
+  "license": "MIT",
+  "keywords": [
+    "blog",
+    "content",
+    "writing",
+    "seo",
+    "youtube",
+    "korean"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "blog-poster",
+    "shortDescription": "주제 리서치부터 블로그 원고와 docx 산출까지 지원",
+    "longDescription": "웹과 유튜브 리서치를 바탕으로 초안 작성, 리뷰, SEO 최적화, 이미지 생성, docx 내보내기까지 연결하는 블로그 작성 플러그인",
+    "developerName": "dreamondal",
+    "category": "Writing",
+    "capabilities": [
+      "Interactive",
+      "Research",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "특정 주제로 블로그 글 초안을 작성해줘.",
+      "이 주제를 조사하고 SEO 관점으로 구조를 잡아줘.",
+      "리서치부터 docx 산출까지 전체 파이프라인을 실행해줘."
+    ],
+    "brandColor": "#2F6B5F"
+  }
+}

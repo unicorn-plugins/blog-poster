@@ -1,0 +1,10 @@
+tools:
+  - name: file_read
+    description: "블로그 초안 및 리서치 파일 읽기"
+    input: { 파일경로 }
+    output: { 파일_내용 }
+
+  - name: file_write
+    description: "검토 의견과 수정본 저장"
+    input: { 파일경로, 내용 }
+    output: { 저장_완료_여부 }
