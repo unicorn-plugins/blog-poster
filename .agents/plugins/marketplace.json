@@ -1,7 +1,7 @@
 {
-  "name": "blog-poster-local",
+  "name": "blog-poster",
   "interface": {
-    "displayName": "blog-poster Local"
+    "displayName": "blog-poster"
   },
   "plugins": [
     {
