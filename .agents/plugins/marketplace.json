@@ -8,7 +8,7 @@
       "name": "blog-poster",
       "source": {
         "source": "local",
-        "path": "./plugins/blog-poster"
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",
