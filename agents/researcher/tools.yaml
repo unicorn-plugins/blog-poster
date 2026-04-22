@@ -1,0 +1,15 @@
+tools:
+  - name: web_search
+    description: "웹에서 주제 관련 공신력 있는 정보 검색"
+    input: { 검색어, 검색_범위 }
+    output: { 검색_결과_목록, URL, 핵심_내용 }
+
+  - name: youtube_search
+    description: "YouTube Data API로 주제 관련 영상 검색 및 자막 추출"
+    input: { 검색어, 최대_결과수, 검색_기간_일수 }
+    output: { 영상_목록, 자막_청크, 채널명 }
+
+  - name: file_write
+    description: "리서치 결과를 마크다운 파일로 저장"
+    input: { 파일경로, 내용 }
+    output: { 저장_완료_여부 }

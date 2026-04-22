@@ -1,0 +1,13 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "blog-poster",
+  "owner": {
+    "name": "dreamondal"
+  },
+  "plugins": [
+    {
+      "name": "blog-poster",
+      "source": "./"
+    }
+  ]
+}

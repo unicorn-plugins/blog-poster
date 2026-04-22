@@ -1,0 +1,8 @@
+.dmap/secrets/
+__pycache__/
+*.pyc
+.env
+gateway/tools/.env
+.omc/
+*.tmp
+.temp/

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/.claude-plugin\")",
+      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/gateway/tools/youtube-search\")",
+      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/gateway/tools/general\")",
+      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/agents/researcher\")",
+      "Bash(mkdir -p \"C:/Users/hiond/workspace/blog-poster/agents/writer\")"
+    ]
+  }
+}

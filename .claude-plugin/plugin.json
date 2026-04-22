@@ -1,0 +1,10 @@
+{
+  "name": "blog-poster",
+  "version": "0.0.1",
+  "description": "특정 주제를 검색하여 한국어 블로그 글과 docx 문서를 자동 작성하는 DMAP 플러그인",
+  "author": {
+    "name": "dreamondal"
+  },
+  "license": "MIT",
+  "keywords": ["blog", "content", "writing", "seo", "youtube", "korean"]
+}
